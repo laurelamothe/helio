@@ -1,16 +1,26 @@
-// functions/resetCagnotte.js
+const fs = require('fs');
+const path = require('path');
 
 const resetCodeValid = "1234"; // Code de réinitialisation valide
-let cagnotte = 0; // Cagnotte stockée en mémoire
 
 exports.handler = async (event, context) => {
   try {
     const { code } = JSON.parse(event.body);
+
     if (code === resetCodeValid) {
-      cagnotte = 0; // Réinitialiser la cagnotte
+      // Lire le fichier JSON pour obtenir le montant actuel de la cagnotte
+      const filePath = path.resolve(__dirname, 'cagnotte.json');
+      const cagnotteData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+      // Réinitialiser la cagnotte
+      cagnotteData.amount = 0;
+
+      // Écrire le nouveau montant dans le fichier JSON
+      fs.writeFileSync(filePath, JSON.stringify(cagnotteData, null, 2));
+
       return {
         statusCode: 200,
-        body: JSON.stringify({ success: true, amount: cagnotte }),
+        body: JSON.stringify({ success: true, amount: cagnotteData.amount }),
       };
     } else {
       return {
