@@ -1,6 +1,6 @@
 // functions/getCagnotteAmount.js
 
-let cagnotte = 0; // Cagnotte stockée en mémoire
+let cagnotte = 0; // Cagnotte initiale en mémoire
 
 exports.handler = async (event, context) => {
   try {

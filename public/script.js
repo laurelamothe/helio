@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    getCagnotteAmount();
+    getCagnotteAmount(); // Obtenir le montant initial de la cagnotte
 
     // Ajouter des points à la cagnotte
     addPointsButton.addEventListener("click", async () => {
