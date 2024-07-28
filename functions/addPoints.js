@@ -1,27 +1,29 @@
-const fs = require('fs');
-const path = require('path');
+const db = require('./firebase');
 
 exports.handler = async (event, context) => {
   try {
-    // Lire le fichier JSON pour obtenir le montant actuel de la cagnotte
-    const filePath = path.resolve(__dirname, 'cagnotte.json');
-    const cagnotteData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const cagnotteRef = db.collection('cagnotte').doc('amount');
+    const doc = await cagnotteRef.get();
 
-    // Ajouter des points à la cagnotte
+    if (!doc.exists) {
+      // Initialiser le montant si le document n'existe pas
+      await cagnotteRef.set({ amount: 0 });
+    }
+
+    // Ajouter des points
     const points = 10;
-    cagnotteData.amount += points;
+    await cagnotteRef.update({ amount: admin.firestore.FieldValue.increment(points) });
 
-    // Écrire le nouveau montant dans le fichier JSON
-    fs.writeFileSync(filePath, JSON.stringify(cagnotteData, null, 2));
-
+    const updatedDoc = await cagnotteRef.get();
     return {
       statusCode: 200,
-      body: JSON.stringify({ amount: cagnotteData.amount }),
+      body: JSON.stringify({ amount: updatedDoc.data().amount }),
     };
   } catch (error) {
+    console.error("Erreur lors de l'ajout de points:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Erreur lors de l\'ajout de points à la cagnotte' }),
+      body: JSON.stringify({ error: "Erreur lors de l'ajout de points à la cagnotte" }),
     };
   }
 };

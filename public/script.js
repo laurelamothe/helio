@@ -30,57 +30,50 @@ document.addEventListener("DOMContentLoaded", () => {
     const getCagnotteAmount = async () => {
         try {
             const response = await fetch("/.netlify/functions/getCagnotteAmount");
+            if (!response.ok) throw new Error('Erreur de récupération');
             const data = await response.json();
             cagnotteAmountElement.textContent = data.amount;
         } catch (error) {
-            console.error("Erreur lors de la récupération de la cagnotte :", error);
+            console.error("Erreur lors de la récupération du montant de la cagnotte:", error);
         }
     };
-
-    getCagnotteAmount(); // Obtenir le montant initial de la cagnotte
 
     // Ajouter des points à la cagnotte
     addPointsButton.addEventListener("click", async () => {
         try {
             const response = await fetch("/.netlify/functions/addPoints", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ points: 10 }),
             });
+            if (!response.ok) throw new Error("Erreur d'ajout de points");
             const data = await response.json();
             cagnotteAmountElement.textContent = data.amount;
         } catch (error) {
-            console.error("Erreur lors de l'ajout de points :", error);
+            console.error("Erreur lors de l'ajout de points:", error);
         }
     });
 
     // Réinitialiser la cagnotte
     resetButton.addEventListener("click", async () => {
         const resetCode = resetCodeInput.value;
-        if (!resetCode) {
-            alert("Veuillez entrer un code de réinitialisation.");
-            return;
-        }
-
         try {
             const response = await fetch("/.netlify/functions/resetCagnotte", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ code: resetCode }),
             });
+            if (!response.ok) throw new Error("Erreur de réinitialisation");
             const data = await response.json();
             if (data.success) {
                 cagnotteAmountElement.textContent = data.amount;
-                alert("Cagnotte réinitialisée avec succès.");
+                alert("Cagnotte réinitialisée avec succès!");
             } else {
-                alert("Code de réinitialisation incorrect.");
+                alert("Code de réinitialisation incorrect!");
             }
         } catch (error) {
-            console.error("Erreur lors de la réinitialisation de la cagnotte :", error);
+            console.error("Erreur lors de la réinitialisation:", error);
         }
     });
+
+    // Charger le montant initial lors du chargement de la page
+    getCagnotteAmount();
 });

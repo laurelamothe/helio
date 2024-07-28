@@ -3,20 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cagnotte App</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Cagnotte en Ligne</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Cagnotte</h1>
-        <div id="countdown"></div>
-        <div>
-            <h2>Montant actuel : <span id="cagnotteAmount">0</span> €</h2>
-            <button id="addPointsButton">Ajouter 10 Points</button>
-            <button id="resetButton">Réinitialiser la Cagnotte</button>
-        </div>
-        <input type="password" id="resetCode" placeholder="Code de réinitialisation" />
-    </div>
+    <h1>Cagnotte en Ligne</h1>
+    <div id="countdown"></div>
+    <h2>Montant actuel de la cagnotte: <span id="cagnotteAmount">0</span></h2>
+    <button id="addPointsButton">Ajouter des points</button>
+    <h2>Réinitialiser la cagnotte</h2>
+    <input type="text" id="resetCode" placeholder="Code de réinitialisation">
+    <button id="resetButton">Réinitialiser</button>
     <script src="script.js"></script>
 </body>
 </html>

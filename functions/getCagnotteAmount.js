@@ -1,17 +1,25 @@
-const fs = require('fs');
-const path = require('path');
+const db = require('./firebase');
 
 exports.handler = async (event, context) => {
   try {
-    // Lire le fichier JSON pour obtenir le montant actuel de la cagnotte
-    const filePath = path.resolve(__dirname, 'cagnotte.json');
-    const cagnotteData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const cagnotteRef = db.collection('cagnotte').doc('amount');
+    const doc = await cagnotteRef.get();
+
+    if (!doc.exists) {
+      // Initialiser le montant si le document n'existe pas
+      await cagnotteRef.set({ amount: 0 });
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ amount: 0 }),
+      };
+    }
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ amount: cagnotteData.amount }),
+      body: JSON.stringify({ amount: doc.data().amount }),
     };
   } catch (error) {
+    console.error('Erreur lors de la récupération de la cagnotte:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Erreur lors de la récupération de la cagnotte' }),
