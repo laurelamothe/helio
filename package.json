@@ -1,15 +1,15 @@
 {
-    "name": "my-netlify-app",
-    "version": "1.0.0",
-    "description": "Application de cagnotte avec Netlify",
-    "main": "index.js",
-    "scripts": {
-      "start": "netlify dev"
-    },
-    "dependencies": {
-      "node-fetch": "^2.6.1"
-    },
-    "devDependencies": {},
-    "author": "Ton Nom",
-    "license
-  
+  "name": "my-netlify-app",
+  "version": "1.0.0",
+  "description": "Application de cagnotte avec Netlify",
+  "main": "index.js",
+  "scripts": {
+    "start": "netlify dev"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {},
+  "author": "Ton Nom",
+  "license": "MIT"
+}
