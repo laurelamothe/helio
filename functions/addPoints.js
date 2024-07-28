@@ -1,8 +1,17 @@
-const db = require('./firebase');
+const admin = require("firebase-admin");
+const db = require("./firebase");
 
 exports.handler = async (event, context) => {
   try {
-    const cagnotteRef = db.collection('cagnotte').doc('amount');
+    // Assurez-vous que la requête est une requête POST
+    if (event.httpMethod !== "POST") {
+      return {
+        statusCode: 405,
+        body: JSON.stringify({ error: "Method Not Allowed" }),
+      };
+    }
+
+    const cagnotteRef = db.collection("cagnotte").doc("amount");
     const doc = await cagnotteRef.get();
 
     if (!doc.exists) {
@@ -10,9 +19,11 @@ exports.handler = async (event, context) => {
       await cagnotteRef.set({ amount: 0 });
     }
 
-    // Ajouter des points
+    // Ajouter des points (par exemple, 10)
     const points = 10;
-    await cagnotteRef.update({ amount: admin.firestore.FieldValue.increment(points) });
+    await cagnotteRef.update({
+      amount: admin.firestore.FieldValue.increment(points),
+    });
 
     const updatedDoc = await cagnotteRef.get();
     return {
@@ -23,7 +34,9 @@ exports.handler = async (event, context) => {
     console.error("Erreur lors de l'ajout de points:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Erreur lors de l'ajout de points à la cagnotte" }),
+      body: JSON.stringify({
+        error: "Erreur lors de l'ajout de points à la cagnotte",
+      }),
     };
   }
 };
